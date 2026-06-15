@@ -24,6 +24,6 @@
     "mikser-io": "^9.0.0"
   },
   "dependencies": {
-    "ws": "^8.18.0"
+    "@directus/sdk": "^20.0.0"
   }
 }

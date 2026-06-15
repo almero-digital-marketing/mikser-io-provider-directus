@@ -37,7 +37,7 @@ This is the **first provider** in the family where realtime is the default and w
 npm install mikser-io-provider-directus
 ```
 
-Peer dep on `mikser-io ^9`. Hard deps on `ws` (WebSocket client). No native modules; works on any Node 20+ runtime.
+Peer dep on `mikser-io ^9`. Hard dep on `@directus/sdk` — the official Directus client. The SDK provides the composable client (`createDirectus().with(staticToken()).with(rest()).with(realtime())`), typed query builders (`readItems`, `readItem`, `readAssetRaw`), and the WebSocket subscription pipeline. We reuse all of it instead of hand-rolling fetch + URLSearchParams + raw WS — the SDK's surface is already what we needed.
 
 ## Get a Directus API token (~1 minute)
 

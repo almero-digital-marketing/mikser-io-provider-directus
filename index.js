@@ -68,7 +68,7 @@ export function providerDirectus(options = {}) {
             const token = options.auth?.token ?? process.env.DIRECTUS_TOKEN
             const url   = options.url        ?? process.env.DIRECTUS_URL
             const result = await createDirectusClient({ url, token })
-            client = result
+            client = result.client
             logger.info('Directus: authenticated as %s @ %s', result.identity, result.baseUrl)
 
             // Decide which sync mode to start in.
