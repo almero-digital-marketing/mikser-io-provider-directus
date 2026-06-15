@@ -26,8 +26,8 @@
 //     glob layer needed beyond what Directus itself enforces.
 
 import path from 'node:path'
+import { createDirectus, staticToken, rest, realtime, readMe } from '@directus/sdk'
 import './lib/state.js'                              // side-effect: registerSchema
-import { createDirectusClient } from './lib/auth.js'
 import { coldScan, pollChanges }      from './lib/sync.js'
 import { openRealtimeSubscriptions }  from './lib/realtime.js'
 import { readDirectusEntity }         from './lib/content.js'
@@ -65,11 +65,34 @@ export function providerDirectus(options = {}) {
             cacheFolder = options.cacheFolder
                 ?? path.join(runtime.options.runtimeFolder ?? path.join(runtime.options.workingFolder, 'runtime'), 'directus-cache')
 
+            // Auth + client init. The SDK's composable shape is the
+            // whole story — no separate auth module needed beyond
+            // these three lines. Identity check via readMe() surfaces
+            // bad tokens / wrong URLs at startup rather than the
+            // first sync attempt.
             const token = options.auth?.token ?? process.env.DIRECTUS_TOKEN
             const url   = options.url        ?? process.env.DIRECTUS_URL
-            const result = await createDirectusClient({ url, token })
-            client = result.client
-            logger.info('Directus: authenticated as %s @ %s', result.identity, result.baseUrl)
+            if (!url)   throw new Error('Directus: `url` is required (e.g. https://cms.example.com)')
+            if (!token) throw new Error('Directus: `token` is required. Generate one in the Directus admin under User → Token.')
+            const baseUrl = url.replace(/\/+$/, '')
+
+            client = createDirectus(baseUrl)
+                .with(staticToken(token))
+                .with(rest())
+                .with(realtime({ authMode: 'handshake' }))
+
+            let identity
+            try {
+                const me = await client.request(readMe({ fields: ['id', 'email'] }))
+                identity = me.email ?? me.id ?? '<unknown>'
+            } catch (err) {
+                throw new Error(
+                    `Directus: token validation failed (${err.message}). ` +
+                    `Check that the URL is reachable, the token is valid, and the role has read access ` +
+                    `to /users/me (and to the configured collections).`
+                )
+            }
+            logger.info('Directus: authenticated as %s @ %s', identity, baseUrl)
 
             // Decide which sync mode to start in.
             const wantRealtime = options.realtime !== false   // default on
