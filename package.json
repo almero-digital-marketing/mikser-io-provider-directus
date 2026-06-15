@@ -1,0 +1,29 @@
+{
+  "name": "mikser-io-provider-directus",
+  "version": "1.0.0",
+  "description": "Directus as a content source for mikser-io. Lifecycle plugin syncs configured collections (and the directus_files store) into the catalog; `read(entity)` plugs into the engine's scheme-dispatched readEntityContent. Realtime via outbound WebSocket subscriptions to /websocket — no public URL required — with automatic polling fallback.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "node --no-warnings --test --test-reporter=spec 'test/**/*.test.js'",
+    "commit": "node ../commit.mjs --only mikser-io-provider-directus",
+    "publish:workspace": "node ../publish.mjs --only mikser-io-provider-directus",
+    "update": "node ../update.mjs --only mikser-io-provider-directus"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/almero-digital-marketing/mikser-io-provider-directus.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/almero-digital-marketing/mikser-io-provider-directus/issues"
+  },
+  "homepage": "https://github.com/almero-digital-marketing/mikser-io-provider-directus#readme",
+  "peerDependencies": {
+    "mikser-io": "^9.0.0"
+  },
+  "dependencies": {
+    "ws": "^8.18.0"
+  }
+}
