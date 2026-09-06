@@ -1,6 +1,6 @@
 {
   "name": "mikser-io-provider-directus",
-  "version": "2.0.0",
+  "version": "11.0.1",
   "description": "Directus as a content source for mikser-io. Lifecycle plugin syncs configured collections (and the directus_files store) into the catalog; `read(entity)` plugs into the engine's scheme-dispatched readEntityContent. Realtime via outbound WebSocket subscriptions to /websocket \u2014 no public URL required \u2014 with automatic polling fallback.",
   "main": "index.js",
   "type": "module",
@@ -21,12 +21,12 @@
   },
   "homepage": "https://github.com/almero-digital-marketing/mikser-io-provider-directus#readme",
   "peerDependencies": {
-    "mikser-io": "^10.0.0"
+    "mikser-io": "^11.0.1"
   },
   "dependencies": {
     "@directus/sdk": "^20.0.0"
   },
   "devDependencies": {
-    "mikser-io": "^10.0.0"
+    "mikser-io": "^11.0.1"
   }
 }
